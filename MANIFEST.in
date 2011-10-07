@@ -1,0 +1,7 @@
+include README
+include LICENSE
+include MANIFEST
+
+graft djpdf
+recursive-include djpdf *.py *.html
+recursive-include example *.py *.html
