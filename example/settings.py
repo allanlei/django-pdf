@@ -117,7 +117,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     
     'example',
-    'djpdf',
+    'djpdf.wkhtmltopdf',
+    'djpdf.pisa',
 )
 
 # A sample logging configuration. The only tangible logging

@@ -1,17 +1,16 @@
 from django.conf.urls.defaults import patterns, include, url
 
-# Uncomment the next two lines to enable the admin:
-# from django.contrib import admin
-# admin.autodiscover()
+from djpdf.wkhtmltopdf.views import PDFView as WebkitPDFView
+from djpdf.pisa.views import PDFView as PisaPDFView
+
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'example.views.home', name='home'),
-    # url(r'^example/', include('example.foo.urls')),
+    url(r'^pisa/1.pdf$', PisaPDFView.as_view(template_name='pdf1.html')),
+    url(r'^wk/1.pdf$', WebkitPDFView.as_view(template_name='pdf1.html')),
 
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    url(r'^pisa/1.pdf$', PisaPDFView.as_view(template_name='pdf2.html')),
+    url(r'^wk/1.pdf$', WebkitPDFView.as_view(template_name='pdf2.html')),
 
-    # Uncomment the next line to enable the admin:
-    # url(r'^admin/', include(admin.site.urls)),
+    url(r'^pisa/1.pdf$', PisaPDFView.as_view(template_name='pdf3.html')),
+    url(r'^wk/1.pdf$', WebkitPDFView.as_view(template_name='pdf3.html')),
 )
