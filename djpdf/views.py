@@ -2,6 +2,7 @@ from django.views import generic
 from django.core.exceptions import ImproperlyConfigured
 from django.conf import settings
 from django.core.urlresolvers import get_callable
+from django.http import HttpResponse
 
 
 DefaultRenderingBackend = get_callable(getattr(settings, 'PDF_DEFAULT_RENDERING_BACKEND', 'djpdf.backends.wkhtmltopdf.RenderingBackend'))
@@ -45,7 +46,7 @@ class PDFMixin(object):
 
 class PDFResponseMixin(PDFMixin):
     def render_to_response(self, context, **kwargs):
-        html = super(PDFView, self).render_to_response(context, **kwargs).render
+        html = super(PDFResponseMixin, self).render_to_response(context, **kwargs).render
         return HttpResponse(self.get_pdf_content(html), mimetype='application/pdf')
         
 class PDFView(PDFResponseMixin, generic.base.TemplateView):
