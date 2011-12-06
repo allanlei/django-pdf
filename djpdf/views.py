@@ -45,7 +45,7 @@ class PDFMixin(object):
 
 class PDFResponseMixin(PDFMixin):
     def render_to_response(self, context, **kwargs):
-        html = super(PDFView, self).render_to_response(context, **kwargs).render
+        html = super(PDFResponseMixin, self).render_to_response(context, **kwargs).render
         return HttpResponse(self.get_pdf_content(html), mimetype='application/pdf')
         
 class PDFView(PDFResponseMixin, generic.base.TemplateView):
