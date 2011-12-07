@@ -4,7 +4,7 @@ from django.conf import settings
 from django.core.urlresolvers import get_callable
 from django.http import HttpResponse
 
-DefaultRenderingBackend = get_callable(getattr(settings, 'PDF_DEFAULT_RENDERER', 'djpdf.renderers.pisa.Renderer'))
+DefaultRenderingBackend = get_callable(getattr(settings, 'PDF_DEFAULT_RENDERER', 'djpdf.renderers.wkhtmltopdf.Renderer'))
 
 
 class PDFResponseMixin(object):
