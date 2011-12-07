@@ -4,50 +4,32 @@ from django.conf import settings
 from django.core.urlresolvers import get_callable
 from django.http import HttpResponse
 
+DefaultRenderingBackend = get_callable(getattr(settings, 'PDF_DEFAULT_RENDERER', 'djpdf.renderers.pisa.Renderer'))
 
-DefaultRenderingBackend = get_callable(getattr(settings, 'PDF_DEFAULT_RENDERING_BACKEND', 'djpdf.backends.wkhtmltopdf.RenderingBackend'))
 
+class PDFResponseMixin(object):
+    pdf_rendering_class = DefaultRenderingBackend
+    
+    def get_pdf_rendering_class(self):
+        if self.pdf_rendering_class:
+            cls = self.pdf_rendering_class
+        else:
+            raise ImproperlyConfigured('Provide pdf_rendering_class.')
+        return cls
 
-class HtmlToPdfMixin(object):
-    def render_to_response(self, context, **kwargs):
-        response = super(HtmlToPdfMixin, self).render_to_response(context, **kwargs)
-        print response.mimetype
-        if response.mimetype in ['text/html']:
-            pass
-        return response
+    def get_pdf_renderer(self):
+        if not hasattr(self, 'pdf_renderer'):
+            self.pdf_renderer = self.get_pdf_rendering_class()()
+        return self.pdf_renderer
+    
+    def render_to_pdf_string(self, content):
+        renderer = self.get_pdf_renderer()
+        return renderer.render(content)
         
-class PDFMixin(object):
-    pdf_backend_class = DefaultRenderingBackend
-    pdf_options = {}
-    
-    def get_pdf_backend_class(self):
-        if self.pdf_backend_class:
-            backend = self.pdf_backend_class
-        else:
-            raise ImproperlyConfigured('Provide pdf_backend')
-        return backend
-
-    def get_pdf_options(self):
-        if self.pdf_options is not None:
-            options = self.pdf_options.copy()
-        else:
-            raise ImproperlyConfigured('Provide pdf_options')
-        return options
-    
-    def get_pdf_backend(self):
-        return self.get_pdf_backend_class()(**self.get_pdf_options())
-
-    def get_pdf_content(self, content):
-        if not hasattr(self, 'pdf_backend'):
-            self.pdf_backend = self.get_pdf_backend()
-        self.pdf_backend.content = content
-        return self.pdf_backend.render_to_string()
-
-
-class PDFResponseMixin(PDFMixin):
     def render_to_response(self, context, **kwargs):
-        html = super(PDFResponseMixin, self).render_to_response(context, **kwargs).render
-        return HttpResponse(self.get_pdf_content(html), mimetype='application/pdf')
+        response = super(PDFResponseMixin, self).render_to_response(context, **kwargs)
+        response.render()
+        return HttpResponse(self.render_to_pdf_string(response.content), mimetype='application/pdf')
         
 class PDFView(PDFResponseMixin, generic.base.TemplateView):
     pass
