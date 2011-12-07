@@ -11,7 +11,7 @@ def find_packages_in(where, **kwargs):
 
 setup(
     name = 'django-pdf',
-    version = '0.1.2',
+    version = '0.2.0',
     author = 'Allan Lei',
     author_email = 'allanlei@helveticode.com',
     description = ('PDF utilities for Django'),
@@ -21,10 +21,6 @@ setup(
     packages=find_packages_in('djpdf'),
     long_description=read('README'),
     install_requires=[
-#        'pisa>=3.0.33',
-#        'html5lib==0.90',       pisa
-#        'reportlab==2.5',       pisa
-#        'pdfkit=='
     ],
     classifiers=[
         'Development Status :: 3 - Alpha',
