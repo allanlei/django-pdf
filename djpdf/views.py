@@ -17,9 +17,14 @@ class PDFResponseMixin(object):
             raise ImproperlyConfigured('Provide pdf_rendering_class.')
         return cls
 
+    def get_pdf_options(self):
+        options = {}
+        options.update(getattr(settings, 'PDF_OPTIONS', {}).copy())
+        return options
+        
     def get_pdf_renderer(self):
         if not hasattr(self, 'pdf_renderer'):
-            self.pdf_renderer = self.get_pdf_rendering_class()()
+            self.pdf_renderer = self.get_pdf_rendering_class()(options=self.get_pdf_options())
         return self.pdf_renderer
     
     def render_to_pdf_string(self, content):

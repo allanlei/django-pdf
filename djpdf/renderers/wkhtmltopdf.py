@@ -6,8 +6,9 @@ WKHTMLTOPDF_CMD = getattr(settings, 'PDF_WKHTMLTOPDF_CMD', 'wkhtmltopdf')
 
 
 class Renderer(object):
-    def __init__(self, options={'quiet': None}):
+    def __init__(self, options={}, quiet=True):
         self.options = options
+        if quiet: self.options.setdefault('quiet', None)
         
     def get_options(self):
         args = []
