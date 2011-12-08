@@ -11,7 +11,7 @@ def find_packages_in(where, **kwargs):
 
 setup(
     name = 'django-pdf',
-    version = '0.2.2',
+    version = '0.2.3',
     author = 'Allan Lei',
     author_email = 'allanlei@helveticode.com',
     description = ('PDF utilities for Django'),
