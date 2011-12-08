@@ -24,7 +24,7 @@ class Renderer(object):
     def render(self, html, fileObj=None):
         proc = subprocess.Popen(self.get_command(), stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         result = proc.communicate(html)
-        if result[1]:
+        if result[1] and not result[0]:
             raise RenderingError(result[1].split('\n')[0])
         pdf_content = result[0]
         
